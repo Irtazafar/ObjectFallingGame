@@ -8,21 +8,24 @@ public class DropObjects : MonoBehaviour
     [SerializeField]
     private GameObject cubePrefab; // Reference to the cube prefab
 
+    [SerializeField]
+    private float dropDistance = 30.0f; // Distance in front of the camera to drop the object
+
     private void Start()
     {
         cameraMove = Camera.main.GetComponent<CameraMove>();
     }
+
     private void Update()
     {
         // Check if the left mouse button is clicked
         if (Input.GetMouseButtonDown(0))
         {
-            // Get the current mouse position in the scene
-            Vector3 mousePosition = cameraMove.GetMousePosition();
-            //mousePosition.z = 0f; // Set the z-coordinate to 0 to ensure the cube is placed on the ground
+            // Get the camera's forward direction and calculate a drop position
+            Vector3 dropPosition = cameraMove.transform.position + cameraMove.transform.forward * dropDistance;
 
-            // Instantiate the cube prefab at the mouse position
-            Instantiate(cubePrefab, mousePosition, Quaternion.identity);
+            // Instantiate the cube prefab at the calculated drop position
+            Instantiate(cubePrefab, dropPosition, Quaternion.identity);
         }
     }
 }
