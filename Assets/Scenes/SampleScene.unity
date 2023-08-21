@@ -1315,8 +1315,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plane: {fileID: 1709585886}
-  moveSpeed: 50
+  moveSpeed: 10
   rotationSpeed: 90
+  ballPrefab: {fileID: 6965686272236682162, guid: ed5e3bd6a5d9e9840acb3b930589f177, type: 3}
+  firingRate: 1
+  bulletSpeed: 50
+  bulletEmitter: {fileID: 900358692}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

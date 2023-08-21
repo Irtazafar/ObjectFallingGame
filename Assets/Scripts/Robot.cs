@@ -12,7 +12,77 @@ public class Robot : MonoBehaviour
     [SerializeField]
     public float rotationSpeed = 90f;
 
+    [SerializeField] public GameObject ballPrefab;
+    [SerializeField] float firingRate = 1f;
+    [SerializeField] float bulletSpeed = 10f;
+    [SerializeField] Transform bulletEmitter;
 
+
+
+
+    //THIS MOVES THE ROBOT WITHIN THE PLANE AND MAKES SURE THAT THE ROBOT FACE IS TOWARDS THAT LOCATION WHERE 
+    private Vector3 minPosition;
+    private Vector3 maxPosition;
+
+    private Vector3 targetPosition; // Target position for the robot's movement
+
+    private void Start()
+    {
+        Collider planeCollider = plane.GetComponent<Collider>();
+        minPosition = planeCollider.bounds.min + Vector3.up;
+        maxPosition = planeCollider.bounds.max - Vector3.up;
+
+        StartCoroutine(MoveRobot());
+        StartCoroutine(FireBalls());
+    }
+
+    private IEnumerator MoveRobot()
+    {
+        while (true)
+        {
+            
+            targetPosition = new Vector3(
+                Random.Range(minPosition.x, maxPosition.x),
+                1f,
+                Random.Range(minPosition.z, maxPosition.z)
+            );
+
+            
+            Vector3 directionToTarget = targetPosition - transform.position;
+
+            
+            Quaternion targetRotation = Quaternion.LookRotation(-directionToTarget, Vector3.up);
+            while (Quaternion.Angle(transform.rotation, targetRotation) > 1f)
+            {
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                yield return null;
+            }
+
+           
+            while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+                yield return null;
+            }
+
+
+         
+        }
+    }
+    private IEnumerator FireBalls()
+    {
+        while (true)
+        {
+            GameObject bullet = Instantiate(ballPrefab, bulletEmitter.position, bulletEmitter.rotation);
+            Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+
+            bulletRb.velocity = bulletEmitter.forward * bulletSpeed;
+
+            yield return new WaitForSeconds(1f / firingRate);
+        }
+    }
+
+    #region ANYDIRECTION
     //THIS SCRIPTS MOVES THE ROBOT IN ANY DIRECTION WITH ROTATION. 
 
     /*private Vector3 minPosition;
@@ -60,54 +130,5 @@ public class Robot : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0f, 1f));
         }
     }*/
-
-    //THIS MOVES THE ROBOT WITHIN THE PLANE AND MAKES SURE THAT THE ROBOT FACE IS TOWARDS THAT LOCATION WHERE 
-    private Vector3 minPosition;
-    private Vector3 maxPosition;
-
-    private Vector3 targetPosition; // Target position for the robot's movement
-
-    private void Start()
-    {
-        Collider planeCollider = plane.GetComponent<Collider>();
-        minPosition = planeCollider.bounds.min + Vector3.up;
-        maxPosition = planeCollider.bounds.max - Vector3.up;
-
-        StartCoroutine(MoveRobot());
-    }
-
-    private IEnumerator MoveRobot()
-    {
-        while (true)
-        {
-            
-            targetPosition = new Vector3(
-                Random.Range(minPosition.x, maxPosition.x),
-                1f,
-                Random.Range(minPosition.z, maxPosition.z)
-            );
-
-            
-            Vector3 directionToTarget = targetPosition - transform.position;
-
-            
-            Quaternion targetRotation = Quaternion.LookRotation(-directionToTarget, Vector3.up);
-            while (Quaternion.Angle(transform.rotation, targetRotation) > 1f)
-            {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-                yield return null;
-            }
-
-           
-            while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-                yield return null;
-            }
-
-          
-            yield return new WaitForSeconds(Random.Range(0f, 1f));
-        }
-    }
-
+    #endregion
 }
