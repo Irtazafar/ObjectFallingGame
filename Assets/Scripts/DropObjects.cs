@@ -6,10 +6,10 @@ public class DropObjects : MonoBehaviour
 {
     private CameraMove cameraMove;
     [SerializeField]
-    private GameObject cubePrefab; // Reference to the cube prefab
+    private GameObject cubePrefab; 
 
     [SerializeField]
-    private float dropDistance = 30.0f; // Distance in front of the camera to drop the object
+    private float dropDistance = 30.0f;
 
     private void Start()
     {
@@ -18,7 +18,7 @@ public class DropObjects : MonoBehaviour
 
     private void Update()
     {
-        // Check if the left mouse button is clicked
+       
         if (Input.GetMouseButtonDown(0))
         {
             // Get the camera's forward direction and calculate a drop position

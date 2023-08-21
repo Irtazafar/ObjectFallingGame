@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -30,6 +31,16 @@ public class CameraMove : MonoBehaviour
     [SerializeField] float minFOV = 20f; // Minimum field of view (zoomed in)
     [SerializeField] float maxFOV = 60f; // Maximum field of view (zoomed out)
 
+    [Header("Skybox Materials")]
+    [SerializeField] Material skyboxMaterial1; 
+    [SerializeField] Material skyboxMaterial2;
+    [SerializeField] Material skyboxMaterial3;
+    private Material targetSkybox;
+
+    private void Start()
+    {
+        targetSkybox = RenderSettings.skybox; 
+    }
 
     void Update()
     {
@@ -55,6 +66,39 @@ public class CameraMove : MonoBehaviour
         float newFOV = Camera.main.fieldOfView - scrollInput * zoomSpeed;
         newFOV = Mathf.Clamp(newFOV, minFOV, maxFOV);
         Camera.main.fieldOfView = newFOV;
+
+
+        // Change skybox based on input
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            targetSkybox = skyboxMaterial1;
+            StartCoroutine(ChangeSkyboxOverTime(targetSkybox));
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            targetSkybox = skyboxMaterial2;
+            StartCoroutine(ChangeSkyboxOverTime(targetSkybox));
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            targetSkybox = skyboxMaterial3;
+            StartCoroutine(ChangeSkyboxOverTime(targetSkybox));
+        }
+    }
+
+    private IEnumerator ChangeSkyboxOverTime(Material newSkybox)
+    {
+        float startTime = Time.time;
+        float duration = 2f; // Change skybox over 2 seconds
+
+        while (Time.time - startTime < duration)
+        {
+            float t = (Time.time - startTime) / duration;
+            RenderSettings.skybox.Lerp(RenderSettings.skybox, newSkybox, t);
+            yield return null;
+        }
+
+        RenderSettings.skybox = newSkybox; // Set the final skybox
     }
 
     public Vector3 GetMousePosition()
