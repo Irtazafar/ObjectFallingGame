@@ -430,6 +430,9 @@ MonoBehaviour:
   sensitivity: 3.99
   yRotationLimit: 88
   moveSpeed: 70
+  zoomSpeed: 50
+  minFOV: 20
+  maxFOV: 60
 --- !u!1 &1320706864
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,17 +12,24 @@ public class CameraMove : MonoBehaviour
         set { sensitivity = value; }
     }
 
+    [Header("Camera Movement")]
     [Range(0.1f, 9f)]
     [SerializeField] float sensitivity = 2f;
     [Tooltip("Limits vertical camera rotation. Prevents the flipping that happens when rotation goes above 90.")]
     [Range(0f, 90f)]
     [SerializeField] float yRotationLimit = 88f;
+    [SerializeField] float moveSpeed = 100f; // Speed at which the camera movess
 
-    [SerializeField] float moveSpeed = 100f; // Speed at which the camera moves
 
     Vector2 rotation = Vector2.zero;
     const string xAxis = "Mouse X";
     const string yAxis = "Mouse Y";
+
+    [Header("Zoom")]
+    [SerializeField] float zoomSpeed = 50f; // Speed at which the camera zooms
+    [SerializeField] float minFOV = 20f; // Minimum field of view (zoomed in)
+    [SerializeField] float maxFOV = 60f; // Maximum field of view (zoomed out)
+
 
     void Update()
     {
@@ -40,8 +47,14 @@ public class CameraMove : MonoBehaviour
 
         // Apply Y axis clamping
         Vector3 newPosition = transform.position + moveDirection * moveSpeed * Time.deltaTime;
-        newPosition.y = Mathf.Max(newPosition.y, 4f); // Ensure Y position is at least 2
+        newPosition.y = Mathf.Max(newPosition.y, 4f); // Ensure Y position is at least 4
         transform.position = newPosition;
+
+        // Camera zoom using scroll wheel
+        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
+        float newFOV = Camera.main.fieldOfView - scrollInput * zoomSpeed;
+        newFOV = Mathf.Clamp(newFOV, minFOV, maxFOV);
+        Camera.main.fieldOfView = newFOV;
     }
 
     public Vector3 GetMousePosition()
