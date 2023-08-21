@@ -429,6 +429,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensitivity: 3.99
   yRotationLimit: 88
+  moveSpeed: 70
 --- !u!1 &1320706864
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,6 +670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubePrefab: {fileID: 8012172319909562140, guid: d768765bdd9249042ab8b638c8d4b85d, type: 3}
+  dropDistance: 20
 --- !u!4 &1486768498
 Transform:
   m_ObjectHideFlags: 0
