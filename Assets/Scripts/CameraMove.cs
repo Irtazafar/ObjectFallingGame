@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// A simple FPP (First Person Perspective) camera rotation and movement script.
@@ -37,9 +39,14 @@ public class CameraMove : MonoBehaviour
     [SerializeField] Material skyboxMaterial3;
     private Material targetSkybox;
 
+
+    [Header("Canvas")]
+    [SerializeField] GameObject backdrop;
+    [SerializeField] TextMeshProUGUI textMsg;
+
     private void Start()
     {
-        targetSkybox = RenderSettings.skybox; 
+        targetSkybox = RenderSettings.skybox;
     }
 
     void Update()
@@ -72,25 +79,26 @@ public class CameraMove : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             targetSkybox = skyboxMaterial1;
-            StartCoroutine(ChangeSkyboxOverTime(targetSkybox));
+            StartCoroutine(ChangeSkyboxOverTime(targetSkybox,"Day"));
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             targetSkybox = skyboxMaterial2;
-            StartCoroutine(ChangeSkyboxOverTime(targetSkybox));
+            StartCoroutine(ChangeSkyboxOverTime(targetSkybox, "Blend"));
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             targetSkybox = skyboxMaterial3;
-            StartCoroutine(ChangeSkyboxOverTime(targetSkybox));
+            StartCoroutine(ChangeSkyboxOverTime(targetSkybox, "Night"));
         }
     }
 
-    private IEnumerator ChangeSkyboxOverTime(Material newSkybox)
+    private IEnumerator ChangeSkyboxOverTime(Material newSkybox,string msg)
     {
+        textMsg.text = msg;
         float startTime = Time.time;
-        float duration = 2f; // Change skybox over 2 seconds
-
+        float duration = 2f;
+        backdrop.SetActive(true);
         while (Time.time - startTime < duration)
         {
             float t = (Time.time - startTime) / duration;
@@ -98,7 +106,10 @@ public class CameraMove : MonoBehaviour
             yield return null;
         }
 
-        RenderSettings.skybox = newSkybox; // Set the final skybox
+        RenderSettings.skybox = newSkybox;
+        backdrop.SetActive(false);
+
+
     }
 
     public Vector3 GetMousePosition()
