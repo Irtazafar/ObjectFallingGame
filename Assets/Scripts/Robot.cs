@@ -33,7 +33,7 @@ public class Robot : MonoBehaviour
         maxPosition = planeCollider.bounds.max - Vector3.up;
 
         StartCoroutine(MoveRobot());
-        StartCoroutine(FireBalls());
+        //StartCoroutine(FireBalls());
     }
 
     private IEnumerator MoveRobot()
