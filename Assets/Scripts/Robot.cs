@@ -12,12 +12,7 @@ public class Robot : MonoBehaviour
     [SerializeField]
     public float rotationSpeed = 90f;
 
-    [SerializeField] public GameObject ballPrefab;
-    [SerializeField] float firingRate = 1f;
-    [SerializeField] float bulletSpeed = 10f;
-    [SerializeField] Transform bulletEmitter;
-
-
+   
 
 
     //THIS MOVES THE ROBOT WITHIN THE PLANE AND MAKES SURE THAT THE ROBOT FACE IS TOWARDS THAT LOCATION WHERE 
@@ -33,7 +28,7 @@ public class Robot : MonoBehaviour
         maxPosition = planeCollider.bounds.max - Vector3.up;
 
         StartCoroutine(MoveRobot());
-        //StartCoroutine(FireBalls());
+       
     }
 
     private IEnumerator MoveRobot()
@@ -69,18 +64,7 @@ public class Robot : MonoBehaviour
          
         }
     }
-    private IEnumerator FireBalls()
-    {
-        while (true)
-        {
-            GameObject bullet = Instantiate(ballPrefab, bulletEmitter.position, bulletEmitter.rotation);
-            Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
-
-            bulletRb.velocity = bulletEmitter.forward * bulletSpeed;
-
-            yield return new WaitForSeconds(1f / firingRate);
-        }
-    }
+   
 
     #region ANYDIRECTION
     //THIS SCRIPTS MOVES THE ROBOT IN ANY DIRECTION WITH ROTATION. 
